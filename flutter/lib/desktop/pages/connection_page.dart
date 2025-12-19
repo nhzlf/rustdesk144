@@ -308,16 +308,16 @@ class _ConnectionPageState extends State<ConnectionPage>
       children: [
         Expanded(
             child: Column(
-          children: [
-            Row(
-              children: [
-                Flexible(child: _buildRemoteIDTextField(context)),
-              ],
-            ).marginOnly(top: 22),
-            SizedBox(height: 12),
-            Divider().paddingOnly(right: 12),
-            Expanded(child: PeerTabPage()),
-          ],
+        //  children: [   // 删除主页上控制远程桌面
+         //   Row(
+         //     children: [
+          //      Flexible(child: _buildRemoteIDTextField(context)),
+          //    ],
+         //   ).marginOnly(top: 22),  // 删除主页上控制远程桌面
+         //   SizedBox(height: 12),  // 删除主页上控制远程桌面
+          //  Divider().paddingOnly(right: 12), //  删除主页上的整个含【最近访问过、收藏、已发现、地址簿、可访问的设备】    
+           // Expanded(child: PeerTabPage()),   //  删除主页上的整个含【最近访问过、收藏、已发现、地址簿、可访问的设备】    
+        //  ],  // 删除主页上控制远程桌面
         ).paddingOnly(left: 12.0)),
         if (!isOutgoingOnly) const Divider(height: 1),
         if (!isOutgoingOnly) OnlineStatusWidget()
