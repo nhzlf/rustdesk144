@@ -1744,7 +1744,21 @@ pub struct LocalConfig {
 
 impl LocalConfig {
     fn load() -> LocalConfig {
-        Config::load_::<LocalConfig>("_local")
+       let mut config =  Config::load_::<LocalConfig>("_local");
+        let mut store = false;
+        	if !config.options.contains_key("enable-udp-punch") {
+            	config.options.insert("enable-udp-punch".to_string(), "Y".to_string());  //常规-启用UDP打洞 默认打勾
+            	store = true;
+        	}
+            if !config.options.contains_key("enable-check-update") {  //常规-启动时检查软件更新 默认去勾
+		        config.options.insert("enable-check-update".to_string(), "N".to_string());
+		        store = true;
+		    }
+		    if store {
+            	config.store();
+        	}
+		        config
+        
     }
 
     fn store(&self) {
