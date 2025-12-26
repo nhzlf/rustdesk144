@@ -18,7 +18,7 @@ import 'package:flutter_hbb/models/server_model.dart';
 import 'package:flutter_hbb/models/state_model.dart';
 import 'package:flutter_hbb/plugin/ui_manager.dart';
 import 'package:flutter_hbb/utils/multi_window_manager.dart';
-import 'package:flutter_hbb/utils/platform_channel.dart';
+// import 'package:flutter_hbb/utils/platform_channel.dart';  //25.12.26去掉右侧窗口用 
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -51,7 +51,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   Timer? _updateTimer;
   bool isCardClosed = false;
 
-  final RxBool _editHover = false.obs;
+  // final RxBool _editHover = false.obs; ////25.12.26去掉右侧窗口用 
   final RxBool _block = false.obs;
 
   final GlobalKey _childKey = GlobalKey();
@@ -59,14 +59,14 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final isIncomingOnly = bind.isIncomingOnly();
+  //  final isIncomingOnly = bind.isIncomingOnly();   //25.12.26去掉右侧窗口用 
     return _buildBlock(
         child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         buildLeftPane(context),
-        if (!isIncomingOnly) const VerticalDivider(width: 1),
-        if (!isIncomingOnly) Expanded(child: buildRightPane(context)),
+       // if (!isIncomingOnly) const VerticalDivider(width: 1), //25.12.26去掉右侧窗口用 
+      //  if (!isIncomingOnly) Expanded(child: buildRightPane(context)), //25.12.26去掉右侧窗口用 
       ],
     ));
   }
@@ -77,22 +77,23 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   }
 
   Widget buildLeftPane(BuildContext context) {
-    final isIncomingOnly = bind.isIncomingOnly();
+    // final isIncomingOnly = bind.isIncomingOnly();  //25.12.26去掉右侧窗口用 
+    final isIncomingOnly = true; // 强制使用接收方模式  //25.12.26去掉右侧窗口用 
     final isOutgoingOnly = bind.isOutgoingOnly();
     final children = <Widget>[
       if (!isOutgoingOnly) buildPresetPasswordWarning(),
-      if (bind.isCustomClient())
-        Align(
-          alignment: Alignment.center,
-          child: loadPowered(context),
-        ),
+    //  if (bind.isCustomClient())  //25.12.26去掉右侧窗口用 
+    //    Align(      //25.12.26去掉右侧窗口用 
+    //      alignment: Alignment.center, //25.12.26去掉右侧窗口用 
+     //     child: loadPowered(context),  //25.12.26去掉右侧窗口用 
+    //    ),     //25.12.26去掉右侧窗口用 
       Align(
         alignment: Alignment.center,
         child: loadLogo(),
       ),
       buildTip(context),
       if (!isOutgoingOnly) buildIDBoard(context),
-      if (!isOutgoingOnly) buildPasswordBoard(context),
+     // if (!isOutgoingOnly) buildPasswordBoard(context),  //25.12.26去掉右侧窗口用 
       FutureBuilder<Widget>(
         future: Future.value(
             Obx(() => buildHelpCards(stateGlobal.updateUrl.value))),
@@ -127,16 +128,18 @@ class _DesktopHomePageState extends State<DesktopHomePage>
         ).marginOnly(bottom: 6, right: 6)
       ]);
     }
-    final textColor = Theme.of(context).textTheme.titleLarge?.color;
+   // final textColor = Theme.of(context).textTheme.titleLarge?.color;  ////25.12.26去掉右侧窗口用 
     return ChangeNotifierProvider.value(
       value: gFFI.serverModel,
       child: Container(
-        width: isIncomingOnly ? 280.0 : 200.0,
+        //width: isIncomingOnly ? 280.0 : 200.0,  //25.12.26去掉右侧窗口用 
+        width: 280.0, // 固定使用接收方模式的宽度 //25.12.26去掉右侧窗口用 
         color: Theme.of(context).colorScheme.background,
-        child: Stack(
+        //child: Stack( //25.12.26去掉右侧窗口用 
+        child: Column((
           children: [
-            Column(
-              children: [
+        //    Column(     //25.12.26去掉右侧窗口用 
+        //      children: [      //25.12.26去掉右侧窗口用 
                 SingleChildScrollView(
                   controller: _leftPaneScrollController,
                   child: Column(
@@ -145,35 +148,35 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                   ),
                 ),
                 Expanded(child: Container())
-              ],
-            ),
-            if (isOutgoingOnly)
-              Positioned(
-                bottom: 6,
-                left: 12,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: InkWell(
-                    child: Obx(
-                      () => Icon(
-                        Icons.settings,
-                        color: _editHover.value
-                            ? textColor
-                            : Colors.grey.withOpacity(0.5),
-                        size: 22,
-                      ),
-                    ),
-                    onTap: () => {
-                      if (DesktopSettingPage.tabKeys.isNotEmpty)
-                        {
-                          DesktopSettingPage.switch2page(
-                              DesktopSettingPage.tabKeys[0])
-                        }
-                    },
-                    onHover: (value) => _editHover.value = value,
-                  ),
-                ),
-              )
+             // ],  //25.12.26去掉右侧窗口用向下 28行
+          //  ),
+          //  if (isOutgoingOnly)
+          //    Positioned(
+          //      bottom: 6,
+          //      left: 12,
+          //      child: Align(
+          //        alignment: Alignment.centerLeft,
+          //        child: InkWell(
+          //          child: Obx(
+          //            () => Icon(
+                   //     Icons.settings,
+                   //     color: _editHover.value
+                   //         ? textColor
+                  //          : Colors.grey.withOpacity(0.5),
+                 //     size: 22,
+                 //     ),
+                 //   ),
+                 //   onTap: () => {
+                 //     if (DesktopSettingPage.tabKeys.isNotEmpty)
+                 //       {
+                 //         DesktopSettingPage.switch2page(
+                 //             DesktopSettingPage.tabKeys[0])
+                //        }
+                  //  },
+                //    onHover: (value) => _editHover.value = value,
+              //    ),
+            //    ),
+            //  )   //25.12.26去掉右侧窗口用向上 28行
           ],
         ),
       ),
@@ -209,7 +212,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                   Container(
                     height: 25,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,  ////25.12.26去掉右侧窗口用
+                      mainAxisAlignment: MainAxisAlignment.start,          ////25.12.26去掉右侧窗口用
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -222,7 +226,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                                   ?.color
                                   ?.withOpacity(0.5)),
                         ).marginOnly(top: 5),
-                        buildPopupMenu(context)
+                      //  buildPopupMenu(context)   //25.12.26去掉右侧窗口用向上
                       ],
                     ),
                   ),
@@ -255,110 +259,112 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     );
   }
 
-  Widget buildPopupMenu(BuildContext context) {
-    final textColor = Theme.of(context).textTheme.titleLarge?.color;
-    RxBool hover = false.obs;
-    return InkWell(
-      onTap: DesktopTabPage.onAddSetting,
-      child: Tooltip(
-        message: translate('Settings'),
-        child: Obx(
-          () => CircleAvatar(
-            radius: 15,
-            backgroundColor: hover.value
-                ? Theme.of(context).scaffoldBackgroundColor
-                : Theme.of(context).colorScheme.background,
-            child: Icon(
-              Icons.more_vert_outlined,
-              size: 20,
-              color: hover.value ? textColor : textColor?.withOpacity(0.5),
-            ),
-          ),
-        ),
-      ),
-      onHover: (value) => hover.value = value,
-    );
+//  Widget buildPopupMenu(BuildContext context) {       //25.12.26 完全移除设置菜单相关函数
+//    final textColor = Theme.of(context).textTheme.titleLarge?.color;
+//    RxBool hover = false.obs;
+//    return InkWell(
+//      onTap: DesktopTabPage.onAddSetting,
+//      child: Tooltip(
+//        message: translate('Settings'),
+//        child: Obx(
+//          () => CircleAvatar(
+//            radius: 15,
+//            backgroundColor: hover.value
+//                ? Theme.of(context).scaffoldBackgroundColor
+//                : Theme.of(context).colorScheme.background,
+//            child: Icon(
+//              Icons.more_vert_outlined,
+//              size: 20,
+//              color: hover.value ? textColor : textColor?.withOpacity(0.5),
+//            ),
+//          ),
+//        ),
+//      ),
+//      onHover: (value) => hover.value = value,
+//    );
+//  }
+
+  buildPasswordBoard(BuildContext context) {    // 25.12.26移除密码面板，返回空容器
+     return Container();
+   // return ChangeNotifierProvider.value( 
+   //     value: gFFI.serverModel,
+   //     child: Consumer<ServerModel>(
+   //       builder: (context, model, child) {
+   //         return buildPasswordBoard2(context, model);
+   //       },
+   //     ));
   }
 
-  buildPasswordBoard(BuildContext context) {
-    return ChangeNotifierProvider.value(
-        value: gFFI.serverModel,
-        child: Consumer<ServerModel>(
-          builder: (context, model, child) {
-            return buildPasswordBoard2(context, model);
-          },
-        ));
-  }
-
-  buildPasswordBoard2(BuildContext context, ServerModel model) {
-    RxBool refreshHover = false.obs;
-    RxBool editHover = false.obs;
-    final textColor = Theme.of(context).textTheme.titleLarge?.color;
-    final showOneTime = model.approveMode != 'click' &&
-        model.verificationMethod != kUsePermanentPassword;
-    return Container(
-      margin: EdgeInsets.only(left: 20.0, right: 16, top: 13, bottom: 13),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.baseline,
-        textBaseline: TextBaseline.alphabetic,
-        children: [
-          Container(
-            width: 2,
-            height: 52,
-            decoration: BoxDecoration(color: MyTheme.accent),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 7),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AutoSizeText(
-                    translate("One-time Password"),
-                    style: TextStyle(
-                        fontSize: 14, color: textColor?.withOpacity(0.5)),
-                    maxLines: 1,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onDoubleTap: () {
-                            if (showOneTime) {
-                              Clipboard.setData(
-                                  ClipboardData(text: model.serverPasswd.text));
-                              showToast(translate("Copied"));
-                            }
-                          },
-                          child: TextFormField(
-                            controller: model.serverPasswd,
-                            readOnly: true,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              contentPadding:
-                                  EdgeInsets.only(top: 14, bottom: 10),
-                            ),
-                            style: TextStyle(fontSize: 15),
-                          ).workaroundFreezeLinuxMint(),
-                        ),
-                      ),
-                      if (showOneTime)
-                        AnimatedRotationWidget(
-                          onPressed: () => bind.mainUpdateTemporaryPassword(),
-                          child: Tooltip(
-                            message: translate('Refresh Password'),
-                            child: Obx(() => RotatedBox(
-                                quarterTurns: 2,
-                                child: Icon(
-                                  Icons.refresh,
-                                  color: refreshHover.value
-                                      ? textColor
-                                      : Color(0xFFDDDDDD),
-                                  size: 22,
-                                ))),
-                          ),
-                          onHover: (value) => refreshHover.value = value,
-                        ).marginOnly(right: 8, top: 4),
+  buildPasswordBoard2(BuildContext context, ServerModel model) {   //25.12.26 移除密码面板，返回空容器
+     return Container();
+   // RxBool refreshHover = false.obs;
+  //  RxBool editHover = false.obs;
+  //  final textColor = Theme.of(context).textTheme.titleLarge?.color;
+  //  final showOneTime = model.approveMode != 'click' &&
+   //     model.verificationMethod != kUsePermanentPassword;
+  //  return Container(
+  //    margin: EdgeInsets.only(left: 20.0, right: 16, top: 13, bottom: 13),
+  //    child: Row(
+  //      crossAxisAlignment: CrossAxisAlignment.baseline,
+  //      textBaseline: TextBaseline.alphabetic,
+ //       children: [
+ //         Container(
+ //           width: 2,
+//            height: 52,
+ //           decoration: BoxDecoration(color: MyTheme.accent),
+ //         ),
+ //         Expanded(
+  //          child: Padding(
+ //             padding: const EdgeInsets.only(left: 7),
+ //             child: Column(
+ //               crossAxisAlignment: CrossAxisAlignment.start,
+ //               children: [
+//                  AutoSizeText(
+ //                   translate("One-time Password"),
+ //                   style: TextStyle(
+//                        fontSize: 14, color: textColor?.withOpacity(0.5)),
+//                    maxLines: 1,
+//                  ),
+//                  Row(
+//                    children: [
+//                      Expanded(
+//                        child: GestureDetector(
+//                          onDoubleTap: () {
+//                            if (showOneTime) {
+//                              Clipboard.setData(
+//                                  ClipboardData(text: model.serverPasswd.text));
+//                              showToast(translate("Copied"));
+//                            }
+//                          },
+//                          child: TextFormField(
+//                            controller: model.serverPasswd,
+//                            readOnly: true,
+//                            decoration: InputDecoration(
+//                              border: InputBorder.none,
+//                              contentPadding:
+//                                  EdgeInsets.only(top: 14, bottom: 10),
+ //                           ),
+ //                           style: TextStyle(fontSize: 15),
+//                          ).workaroundFreezeLinuxMint(),
+//                        ),
+//                      ),
+//                      if (showOneTime)
+//                        AnimatedRotationWidget(
+//                          onPressed: () => bind.mainUpdateTemporaryPassword(),
+//                          child: Tooltip(
+//                            message: translate('Refresh Password'),
+//                            child: Obx(() => RotatedBox(
+//                                quarterTurns: 2,
+//                                child: Icon(
+//                                  Icons.refresh,
+//                                  color: refreshHover.value
+//                                      ? textColor
+//                                      : Color(0xFFDDDDDD),
+//                                  size: 22,
+//                                ))),
+//                          ),
+//                          onHover: (value) => refreshHover.value = value,
+//                        ).marginOnly(right: 8, top: 4),
                      // if (!bind.isDisableSettings())   //删除一次性密码中的设置按钮
                        // InkWell(
                          // child: Tooltip(
@@ -377,15 +383,15 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                         //      SettingsTabKey.safety),
                        //   onHover: (value) => editHover.value = value,
                       //  ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+ //                   ],
+ //                 ),
+ //               ],
+ //             ),
+ //           ),
+ //         ),
+ //       ],
+//      ),
+//    );
   }
 
   buildTip(BuildContext context) {
@@ -761,19 +767,19 @@ class _DesktopHomePageState extends State<DesktopHomePage>
           'scaleFactor': screen.scaleFactor,
         };
 
-    bool isChattyMethod(String methodName) {
-      switch (methodName) {
-        case kWindowBumpMouse: return true;
-      }
+ //   bool isChattyMethod(String methodName) {  //25.12.26//25.12.26去掉右侧窗口用 删6行
+ //     switch (methodName) {
+ //       case kWindowBumpMouse: return true;
+//      }
 
-      return false;
-    }
+ //     return false;
+ //   }
 
     rustDeskWinManager.setMethodHandler((call, fromWindowId) async {
-      if (!isChattyMethod(call.method)) {
+    //  if (!isChattyMethod(call.method)) {           // //25.12.26
         debugPrint(
           "[Main] call ${call.method} with args ${call.arguments} from window $fromWindowId");
-      }
+   //   }
       if (call.method == kWindowMainWindowOnTop) {
         windowOnTop(null);
       } else if (call.method == kWindowGetWindowInfo) {
@@ -792,56 +798,56 @@ class _DesktopHomePageState extends State<DesktopHomePage>
         await rustDeskWinManager.registerActiveWindow(call.arguments["id"]);
       } else if (call.method == kWindowEventHide) {
         await rustDeskWinManager.unregisterActiveWindow(call.arguments['id']);
-      } else if (call.method == kWindowConnect) {
-        await connectMainDesktop(
-          call.arguments['id'],
-          isFileTransfer: call.arguments['isFileTransfer'],
-          isViewCamera: call.arguments['isViewCamera'],
-          isTerminal: call.arguments['isTerminal'],
-          isTcpTunneling: call.arguments['isTcpTunneling'],
-          isRDP: call.arguments['isRDP'],
-          password: call.arguments['password'],
-          forceRelay: call.arguments['forceRelay'],
-          connToken: call.arguments['connToken'],
-        );
-      } else if (call.method == kWindowBumpMouse) {
-        return RdPlatformChannel.instance.bumpMouse(
-          dx: call.arguments['dx'],
-          dy: call.arguments['dy']);
-      } else if (call.method == kWindowEventMoveTabToNewWindow) {
-        final args = call.arguments.split(',');
-        int? windowId;
-        try {
-          windowId = int.parse(args[0]);
-        } catch (e) {
-          debugPrint("Failed to parse window id '${call.arguments}': $e");
-        }
-        WindowType? windowType;
-        try {
-          windowType = WindowType.values.byName(args[3]);
-        } catch (e) {
-          debugPrint("Failed to parse window type '${call.arguments}': $e");
-        }
-        if (windowId != null && windowType != null) {
-          await rustDeskWinManager.moveTabToNewWindow(
-              windowId, args[1], args[2], windowType);
-        }
-      } else if (call.method == kWindowEventOpenMonitorSession) {
-        final args = jsonDecode(call.arguments);
-        final windowId = args['window_id'] as int;
-        final peerId = args['peer_id'] as String;
-        final display = args['display'] as int;
-        final displayCount = args['display_count'] as int;
-        final windowType = args['window_type'] as int;
-        final screenRect = parseParamScreenRect(args);
-        await rustDeskWinManager.openMonitorSession(
-            windowId, peerId, display, displayCount, screenRect, windowType);
-      } else if (call.method == kWindowEventRemoteWindowCoords) {
-        final windowId = int.tryParse(call.arguments);
-        if (windowId != null) {
-          return jsonEncode(
-              await rustDeskWinManager.getOtherRemoteWindowCoords(windowId));
-        }
+    //  } else if (call.method == kWindowConnect) { //25.12.26去掉右侧窗口用 向下删 50行
+    //    await connectMainDesktop(
+    //      call.arguments['id'],
+    //      isFileTransfer: call.arguments['isFileTransfer'],
+    //      isViewCamera: call.arguments['isViewCamera'],
+    /      isTerminal: call.arguments['isTerminal'],
+    //      isTcpTunneling: call.arguments['isTcpTunneling'],
+    //      isRDP: call.arguments['isRDP'],
+    //      password: call.arguments['password'],
+    //      forceRelay: call.arguments['forceRelay'],
+    //      connToken: call.arguments['connToken'],
+   //     );
+   //   } else if (call.method == kWindowBumpMouse) {
+   //     return RdPlatformChannel.instance.bumpMouse(
+  //        dx: call.arguments['dx'],
+  //        dy: call.arguments['dy']);
+  //    } else if (call.method == kWindowEventMoveTabToNewWindow) {
+  //      final args = call.arguments.split(',');
+  //      int? windowId;
+  //      try {
+  //        windowId = int.parse(args[0]);
+  //      } catch (e) {
+ //         debugPrint("Failed to parse window id '${call.arguments}': $e");
+ //       }
+ //       WindowType? windowType;
+ //       try {
+ //         windowType = WindowType.values.byName(args[3]);
+//        } catch (e) {
+//          debugPrint("Failed to parse window type '${call.arguments}': $e");
+//        }
+//        if (windowId != null && windowType != null) {
+ //         await rustDeskWinManager.moveTabToNewWindow(
+//              windowId, args[1], args[2], windowType);
+//        }
+//      } else if (call.method == kWindowEventOpenMonitorSession) {
+//        final args = jsonDecode(call.arguments);
+//        final windowId = args['window_id'] as int;
+//        final peerId = args['peer_id'] as String;
+//        final display = args['display'] as int;
+//        final displayCount = args['display_count'] as int;
+//        final windowType = args['window_type'] as int;
+//        final screenRect = parseParamScreenRect(args);
+//        await rustDeskWinManager.openMonitorSession(
+//            windowId, peerId, display, displayCount, screenRect, windowType);
+//      } else if (call.method == kWindowEventRemoteWindowCoords) {
+//        final windowId = int.tryParse(call.arguments);
+//        if (windowId != null) {
+//          return jsonEncode(
+//              await rustDeskWinManager.getOtherRemoteWindowCoords(windowId));
+//        }
       }
     });
     _uniLinksSubscription = listenUniLinks();
