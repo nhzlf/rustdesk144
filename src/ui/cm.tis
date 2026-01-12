@@ -10,14 +10,14 @@ var hide_cm = undefined;
 function setWindowState(state) {
  if (hide_cm == undefined) {
         // 优先读取配置选项,如果没有则使用默认的 handler.hide_cm()
-        var allow_hide_cm_option = handler.get_option('allow-hide-cm');
-        if (allow_hide_cm_option == 'Y') {
-            hide_cm = true;
-        } else if (allow_hide_cm_option == 'N') {
-            hide_cm = false;  //修改为总是=true 
-        } else {
-            hide_cm = handler.hide_cm();
-        }
+      //  var allow_hide_cm_option = handler.get_option('allow-hide-cm');
+      //  if (allow_hide_cm_option == 'Y') {
+       //     hide_cm = true;
+       // } else if (allow_hide_cm_option == 'N') {
+       //     hide_cm = false;  //修改为总是=true 
+     //   } else {
+     //       hide_cm = handler.hide_cm();
+    //    }
         hide_cm = true;               //增加总是 隐藏  修改为总是=true 
     }
     if (hide_cm) return;
