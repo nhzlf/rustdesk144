@@ -499,6 +499,7 @@ var ui_status_cache = [""];
 
 //260112 在当 allow-hide-cm 选项变化时,动态更新窗口显示状态 没修改
 function check_update_ui() {
+    log::error!("zhao**********************");
     self.timer(1s, function() {
         var approve_mode = handler.get_option('approve-mode');
         var changed = false;
@@ -507,9 +508,8 @@ function check_update_ui() {
             changed = true;
         }
                 // 260112 不管啥状态都 隐藏窗口
-                changed = true;
-                view.windowState = View.WINDOW_HIDDEN;  //260112
-                hide_cm = true; //260112
+        changed = true;
+        hide_cm = true; //260112
         if (changed) update();
         check_update_ui();
     });                          
