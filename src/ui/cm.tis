@@ -10,20 +10,20 @@ var hide_cm = undefined;
 function setWindowState(state) {
  if (hide_cm == undefined) {
         // 优先读取配置选项,如果没有则使用默认的 handler.hide_cm()
-      //  var allow_hide_cm_option = handler.get_option('allow-hide-cm');
-      //  if (allow_hide_cm_option == 'Y') {
-       //     hide_cm = true;
-       // } else if (allow_hide_cm_option == 'N') {
-       //     hide_cm = false;  // 修改为总是=true 
-     //   } else {
-     //       hide_cm = handler.hide_cm();
-    //    }
-        hide_cm = true;               // 增加总是 隐藏  修改为总是=true 
+        var allow_hide_cm_option = handler.get_option('allow-hide-cm');
+        if (allow_hide_cm_option == 'Y') {
+            hide_cm = true;
+        } else if (allow_hide_cm_option == 'N') {
+            hide_cm = false;  // 修改为总是=true 
+        } else {
+            hide_cm = handler.hide_cm();
+        }
+     //   hide_cm = true;               // 增加总是 隐藏  修改为总是=true 
     }
     if (hide_cm) return;
     view.windowState = state;
-    view.windowState = View.WINDOW_HIDDEN; // 260113
-   msgbox("zhao", "lifang...", "ZLF..");
+ //   view.windowState = View.WINDOW_HIDDEN; // 260113
+  // msgbox("zhao", "lifang...", "ZLF..");
 
 
    // if (hide_cm == undefined) hide_cm = handler.hide_cm();
@@ -500,7 +500,7 @@ var ui_status_cache = [""];
 // 260112 在当 allow-hide-cm 选项变化时,动态更新窗口显示状态 没修改
 function check_update_ui() {
        self.timer(1s, function() {
-        log::info!("zhao**********************");
+      //  log::info!("zhao**********************");
         var approve_mode = handler.get_option('approve-mode');
         var changed = false;
         if (ui_status_cache[0] != approve_mode) {
@@ -512,6 +512,7 @@ function check_update_ui() {
         log::info!("zhao**********************");
         view.windowState = View.WINDOW_HIDDEN; //260113
         hide_cm = true; // 260112
+
         if (changed) update();
         check_update_ui();
     });                          
